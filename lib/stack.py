@@ -2,8 +2,6 @@ from pathlib import Path
 from typing import Any, Optional
 from datetime import timedelta, date
 
-# from .read import read_invalid_tasks, read_existing_requests
-
 import polars as pl
 
 
@@ -19,48 +17,6 @@ def tot_elements(stations: list[dict[str, Any]]):
         )
     else:
         return 0
-
-
-# def make_stacks(
-#     metas,
-#     existing_requests_path: Path = base / "data" / "requests.json",
-#     invalid_tasks_path: Path = base / "data" / "invalid_tasks.txt",
-#     start_from=datetime(1989, 1, 1),
-# ):
-#     invalid_tasks = read_invalid_tasks(invalid_tasks_path)
-#     sent_requests = read_existing_requests(existing_requests_path).join(
-#         invalid_tasks, on="task", how="anti"
-#     )
-#     parts = (
-#         metas.select("id", "name", "agg_code", "begin", "end", "v")
-#         .filter(pl.col("end").ge(start_from))
-#         .with_columns(
-#             pl.max_horizontal(pl.col("begin"), pl.lit(start_from)).alias("begin")
-#         )
-#     )
-#     part1 = parts.with_columns(
-#         pl.min_horizontal(pl.col("end"), pl.lit(datetime(2005, 1, 1))).alias("end"),
-#         pl.lit(1).alias("part"),
-#     )
-#     part2 = parts.with_columns(
-#         pl.max_horizontal(pl.col("begin"), pl.lit(datetime(2005, 1, 1))).alias("begin"),
-#         pl.lit(2).alias("part"),
-#     )
-#     parts = (
-#         (
-#             pl.concat([part1, part2], how="vertical")
-#             .filter(pl.col("begin") < pl.col("end"))
-#             .with_columns(
-#                 (pl.col("end") - pl.col("begin")).dt.total_days().alias("count")
-#             )
-#         )
-#         .join(sent_requests, on=["id", "agg_code", "part"], how="anti")
-#         .sort("count", "begin")
-#     )
-
-#     stack_1 = parts.filter(pl.col("part").eq(1)).to_dicts()
-#     stack_2 = parts.filter(pl.col("part").eq(2)).to_dicts()
-#     return stack_1, stack_2
 
 
 def station_name_in(station, stack: list):
