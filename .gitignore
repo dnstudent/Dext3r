@@ -1,0 +1,7 @@
+data/
+test/
+__pycache__/
+.DS_Store
+*.json
+*.csv
+*.parquet
